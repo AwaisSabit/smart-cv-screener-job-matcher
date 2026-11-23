@@ -78,6 +78,24 @@ def rank_jobs(cv, jobs, top_n=None):
     return results[:top_n] if top_n else results
 
 
+def shortlist(results, threshold=60.0):
+    """Keep only results at or above the score threshold.
+
+    Returns ``(shortlisted, rejected)`` — both in ranking order.
+    The default threshold of 60 keeps "Good match" and better.
+    """
+    shortlisted = [r for r in results if r.score >= threshold]
+    rejected = [r for r in results if r.score < threshold]
+    return shortlisted, rejected
+
+
+def shortlist_cvs(cvs, job, threshold=60.0, top_n=None):
+    """Rank CVs against a job and return only the shortlisted ones."""
+    ranked = rank_cvs(cvs, job, top_n=top_n)
+    shortlisted, _ = shortlist(ranked, threshold=threshold)
+    return shortlisted
+
+
 def _similarity(cv_text, job_text):
     """Cosine similarity between one CV and one job (0–1)."""
     if not cv_text.strip() or not job_text.strip():
