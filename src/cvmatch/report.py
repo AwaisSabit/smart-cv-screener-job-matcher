@@ -117,3 +117,15 @@ def save_results_json(path, results):
     with open(path, "w", encoding="utf-8") as handle:
         json.dump(results_to_rows(results), handle, indent=2)
     return str(path)
+
+
+def save_shortlist_csv(path, results, threshold=60.0):
+    """Save only the shortlisted results (score >= threshold) to CSV.
+
+    Returns ``(path, shortlisted_count)``.
+    """
+    from cvmatch.rank import shortlist
+
+    shortlisted, _ = shortlist(results, threshold=threshold)
+    save_results_csv(path, shortlisted)
+    return str(path), len(shortlisted)
