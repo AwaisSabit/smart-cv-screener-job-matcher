@@ -32,7 +32,9 @@ def extract_skills(text):
 def extract_years_experience(text):
     """Guess years of experience from phrases like "5 years experience".
 
-    Returns the largest number found in such phrases, or None.
+    Returns the largest number found in such phrases, or None. Also
+    estimates from dated job history ("2020 - 2024") when no phrase
+    is found, using the span of the earliest and latest years.
     """
     lowered = clean_text(text)
     years = []
@@ -40,7 +42,31 @@ def extract_years_experience(text):
         years.append(float(match.group(1)))
     for match in re.finditer(r"experience\s*[:\-]?\s*(\d+(?:\.\d+)?)\s*years?", lowered):
         years.append(float(match.group(1)))
-    return max(years) if years else None
+    if years:
+        return max(years)
+    return experience_from_dates(text)
+
+
+def experience_from_dates(text, current_year=2026):
+    """Estimate experience from a dated work history in the text.
+
+    Looks for year ranges like "2020 - 2024" or "2019 to present"
+    and returns the total span. Returns None when no dates are found.
+    """
+    spans = []
+    for match in re.finditer(r"(19|20)\d{2}\s*[-–—]\s*((?:19|20)\d{2}|present|current|now)", text, re.IGNORECASE):
+        start = int(match.group(0)[:4])
+        end_text = match.group(2).lower()
+        end = current_year if end_text in {"present", "current", "now"} else int(end_text)
+        if end >= start:
+            spans.append(end - start)
+    if spans:
+        return float(max(spans))
+    single = re.findall(r"\b(?:19|20)\d{2}\b", text)
+    if len(single) >= 2:
+        nums = [int(y) for y in single]
+        return float(max(nums) - min(nums))
+    return None
 
 
 DEGREE_LEVELS = [
