@@ -69,3 +69,51 @@ def write_report(path, content):
     with open(path, "w", encoding="utf-8") as handle:
         handle.write(content)
     return str(path)
+
+
+def results_to_rows(results):
+    """Turn match results into plain dicts for CSV/JSON export."""
+    rows = []
+    for rank, result in enumerate(results, 1):
+        rows.append(
+            {
+                "rank": rank,
+                "candidate": result.cv_name,
+                "job": result.job_title,
+                "score": result.score,
+                "verdict": score_label(result.score),
+                "similarity": result.similarity,
+                "skill_score": result.skill_score,
+                "experience_score": result.experience_score,
+                "matched_skills": "; ".join(result.matched_skills),
+                "missing_skills": "; ".join(result.missing_skills),
+                "keyword_overlap": result.keyword_overlap,
+            }
+        )
+    return rows
+
+
+def save_results_csv(path, results):
+    """Save match results to a CSV file and return the path."""
+    import csv
+
+    rows = results_to_rows(results)
+    fieldnames = list(rows[0].keys()) if rows else [
+        "rank", "candidate", "job", "score", "verdict", "similarity",
+        "skill_score", "experience_score", "matched_skills",
+        "missing_skills", "keyword_overlap",
+    ]
+    with open(path, "w", encoding="utf-8", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(rows)
+    return str(path)
+
+
+def save_results_json(path, results):
+    """Save match results to a JSON file and return the path."""
+    import json
+
+    with open(path, "w", encoding="utf-8") as handle:
+        json.dump(results_to_rows(results), handle, indent=2)
+    return str(path)
