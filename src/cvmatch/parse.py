@@ -17,6 +17,21 @@ def read_text_file(path):
     return Path(path).read_text(encoding="utf-8", errors="replace")
 
 
+def read_pdf_file(path):
+    """Read a PDF CV and return its text, page by page.
+
+    Scanned PDFs (pictures of text) have no extractable text, so they
+    come back empty — the README says so plainly.
+    """
+    from pypdf import PdfReader
+
+    reader = PdfReader(str(path))
+    pages = []
+    for page in reader.pages:
+        pages.append(page.extract_text() or "")
+    return "\n".join(pages).strip()
+
+
 def guess_name(text, source):
     """Guess the candidate's name from the first non-empty line.
 
@@ -46,9 +61,11 @@ def parse_cv(path):
     suffix = path.suffix.lower()
     if suffix == ".txt":
         text = read_text_file(path)
-    elif suffix in {".pdf", ".docx"}:
+    elif suffix == ".pdf":
+        text = read_pdf_file(path)
+    elif suffix == ".docx":
         raise NotImplementedError(
-            f"{suffix} CV parsing is not built yet — use a .txt CV for now"
+            ".docx CV parsing is not built yet — use a .txt or .pdf CV for now"
         )
     else:
         raise ValueError(f"Unsupported CV file type: {suffix or '(no extension)'}")
