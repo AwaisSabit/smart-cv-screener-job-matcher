@@ -32,6 +32,20 @@ def read_pdf_file(path):
     return "\n".join(pages).strip()
 
 
+def read_word_file(path):
+    """Read a Word (.docx) CV and return its text, paragraph by paragraph."""
+    from docx import Document
+
+    document = Document(str(path))
+    parts = [p.text for p in document.paragraphs if p.text.strip()]
+    for table in document.tables:
+        for row in table.rows:
+            for cell in row.cells:
+                if cell.text.strip():
+                    parts.append(cell.text)
+    return "\n".join(parts).strip()
+
+
 def guess_name(text, source):
     """Guess the candidate's name from the first non-empty line.
 
@@ -54,8 +68,7 @@ def guess_name(text, source):
 def parse_cv(path):
     """Parse a CV file into a :class:`~cvmatch.models.CV`.
 
-    Only ``.txt`` files are supported yet; PDF and Word support is
-    added in later commits.
+    Supports ``.txt``, ``.pdf`` and ``.docx`` files.
     """
     path = Path(path)
     suffix = path.suffix.lower()
@@ -64,9 +77,7 @@ def parse_cv(path):
     elif suffix == ".pdf":
         text = read_pdf_file(path)
     elif suffix == ".docx":
-        raise NotImplementedError(
-            ".docx CV parsing is not built yet — use a .txt or .pdf CV for now"
-        )
+        text = read_word_file(path)
     else:
         raise ValueError(f"Unsupported CV file type: {suffix or '(no extension)'}")
     return CV(name=guess_name(text, str(path)), source=str(path), raw_text=text)
