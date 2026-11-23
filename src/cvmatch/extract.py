@@ -94,6 +94,48 @@ def extract_degree_level(text):
     return best
 
 
+DEGREE_NAMES = [
+    (r"\bbs\s+(?:in\s+)?computer science\b", "BS Computer Science"),
+    (r"\bbs\s+(?:in\s+)?software engineering\b", "BS Software Engineering"),
+    (r"\bbba\b", "BBA"),
+    (r"\bmba\b", "MBA"),
+    (r"\bms\s+(?:in\s+)?computer science\b", "MS Computer Science"),
+    (r"\bms\s+(?:in\s+)?data science\b", "MS Data Science"),
+    (r"\bbs\s+(?:in\s+)?data science\b", "BS Data Science"),
+    (r"\bbe\s+(?:in\s+)?electrical engineering\b", "BE Electrical Engineering"),
+    (r"\bb\.?com\b", "B.Com"),
+    (r"\bm\.?com\b", "M.Com"),
+    (r"\bfa\b", "FA"),
+    (r"\bf\.?sc\b", "FSc"),
+]
+
+
+def extract_degree_name(text):
+    """Return the named degree found in the text, or "".
+
+    e.g. "BS Computer Science" from "BS in Computer Science, 2021".
+    """
+    lowered = clean_text(text)
+    for pattern, name in DEGREE_NAMES:
+        if re.search(pattern, lowered):
+            return name
+    return ""
+
+
+def extract_education(text):
+    """Return a small dict describing the education found in the text.
+
+    Keys: ``level`` (highest degree level), ``degree`` (named degree
+    or ""), ``years`` (graduation years mentioned, if any).
+    """
+    years = sorted({int(y) for y in re.findall(r"\b(?:19|20)\d{2}\b", text)})
+    return {
+        "level": extract_degree_level(text),
+        "degree": extract_degree_name(text),
+        "years": years,
+    }
+
+
 def enrich_cv(cv):
     """Fill in a CV's skills, experience and degree from its text."""
     cv.skills = extract_skills(cv.raw_text)
