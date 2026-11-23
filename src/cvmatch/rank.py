@@ -60,3 +60,29 @@ def rank_cvs(cvs, job, top_n=None):
     ]
     results.sort(key=lambda r: (-r.score, -r.skill_score, r.cv_name))
     return results[:top_n] if top_n else results
+
+
+def rank_jobs(cv, jobs, top_n=None):
+    """Rank jobs against one CV, best score first.
+
+    The same CV is scored against each job, so a candidate can see
+    which openings fit them best.
+    """
+    enrich_cv(cv)
+    for job in jobs:
+        enrich_job(job)
+    results = []
+    for job in jobs:
+        results.append(_score_from_parts(cv, job, _similarity(cv.raw_text, job.raw_text)))
+    results.sort(key=lambda r: (-r.score, -r.skill_score, r.job_title))
+    return results[:top_n] if top_n else results
+
+
+def _similarity(cv_text, job_text):
+    """Cosine similarity between one CV and one job (0–1)."""
+    if not cv_text.strip() or not job_text.strip():
+        return 0.0
+    from cvmatch.vectorise import vectorise_pair
+
+    cv_vector, job_vector, _ = vectorise_pair(cv_text, job_text)
+    return float(cosine_similarity(cv_vector, job_vector)[0][0])
