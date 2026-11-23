@@ -87,6 +87,46 @@ def score_summary(result):
     )
 
 
+def score_breakdown(result):
+    """Explain where a score comes from, in plain numbers.
+
+    Returns a dict with each part's points out of its maximum, so a
+    report can show the working instead of just the total.
+    """
+    return {
+        "text similarity": {
+            "value": result.similarity,
+            "points": round(50 * result.similarity, 1),
+            "max_points": 50,
+        },
+        "skill match": {
+            "value": result.skill_score,
+            "points": round(35 * result.skill_score, 1),
+            "max_points": 35,
+        },
+        "experience fit": {
+            "value": result.experience_score,
+            "points": round(15 * result.experience_score, 1),
+            "max_points": 15,
+        },
+        "total": {"value": result.score, "points": result.score, "max_points": 100},
+    }
+
+
+def breakdown_lines(result):
+    """Human-readable lines explaining a result's score."""
+    breakdown = score_breakdown(result)
+    lines = []
+    for name in ("text similarity", "skill match", "experience fit"):
+        part = breakdown[name]
+        lines.append(
+            f"{name}: {part['points']} of {part['max_points']} points "
+            f"(value {part['value']})"
+        )
+    lines.append(f"Total: {result.score} of 100 — {score_label(result.score)}")
+    return lines
+
+
 def match_score(cv, job):
     """Score one CV against one job and return a :class:`MatchResult`.
 
@@ -103,7 +143,7 @@ def match_score(cv, job):
     matched = [s for s in job.required_skills if s in cv.skills]
     missing = [s for s in job.required_skills if s not in cv.skills]
     overlap = keyword_overlap(cv.raw_text, job.raw_text)
-    return MatchResult(
+    result = MatchResult(
         cv_name=cv.name,
         job_title=job.title,
         score=score,
@@ -114,3 +154,5 @@ def match_score(cv, job):
         missing_skills=missing,
         keyword_overlap=round(overlap, 3),
     )
+    result.breakdown = score_breakdown(result)
+    return result
