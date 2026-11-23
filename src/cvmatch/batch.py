@@ -27,6 +27,8 @@ def find_cv_files(folder):
     for path in folder.iterdir():
         if not path.is_file() or path.suffix.lower() not in SUPPORTED_SUFFIXES:
             continue
+        if path.name.lower().startswith("job-"):
+            continue  # job descriptions are not CVs
         stem = path.stem.lower()
         if stem not in best or preference[path.suffix.lower()] < preference[best[stem].suffix.lower()]:
             best[stem] = path

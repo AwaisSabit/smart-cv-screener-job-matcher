@@ -54,7 +54,7 @@ def experience_from_dates(text, current_year=2026):
     and returns the total span. Returns None when no dates are found.
     """
     spans = []
-    for match in re.finditer(r"(19|20)\d{2}\s*[-–—]\s*((?:19|20)\d{2}|present|current|now)", text, re.IGNORECASE):
+    for match in re.finditer(r"(19|20)\d{2}\s*(?:[-–—]|to)\s*((?:19|20)\d{2}|present|current|now)", text, re.IGNORECASE):
         start = int(match.group(0)[:4])
         end_text = match.group(2).lower()
         end = current_year if end_text in {"present", "current", "now"} else int(end_text)
