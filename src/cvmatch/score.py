@@ -127,6 +127,28 @@ def breakdown_lines(result):
     return lines
 
 
+def missing_skills(cv_skills, job_skills):
+    """Skills the job needs that the CV does not show, in job order."""
+    cv_set = set(cv_skills)
+    return [skill for skill in job_skills if skill not in cv_set]
+
+
+def skill_gap_report(cv, job):
+    """Plain-language summary of the skill gap between a CV and a job."""
+    if not job.required_skills and job.raw_text:
+        enrich_job(job)
+    missing = missing_skills(cv.skills, job.required_skills)
+    matched = [s for s in job.required_skills if s in cv.skills]
+    if not job.required_skills:
+        return "The job lists no required skills from the built-in list."
+    if not missing:
+        return f"All {len(matched)} required skills are present in the CV."
+    return (
+        f"{len(matched)} of {len(job.required_skills)} required skills "
+        f"matched. Missing: {', '.join(missing)}."
+    )
+
+
 def match_score(cv, job):
     """Score one CV against one job and return a :class:`MatchResult`.
 
