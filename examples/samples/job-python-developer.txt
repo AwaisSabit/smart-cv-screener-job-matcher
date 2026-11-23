@@ -1,0 +1,19 @@
+Python Developer (Django) — TechNova Solutions, Lahore
+
+We are hiring a Python Developer to build and maintain web applications
+for our clients.
+
+Requirements
+- 3 years of experience in Python development
+- Strong Django and Flask skills
+- SQL and PostgreSQL databases
+- REST API design and development
+- Git version control and Docker deployments
+- AWS cloud experience is a plus
+- Good communication and teamwork skills
+
+What you will do
+- Build Django REST APIs and admin panels
+- Work with pandas and data analysis for reporting features
+- Follow Agile Scrum with a team of developers
+- Write automated tests and review code

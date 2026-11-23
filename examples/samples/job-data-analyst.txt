@@ -1,0 +1,16 @@
+Data Analyst — RetailOne, Karachi
+
+We are hiring a Data Analyst to turn our sales data into clear reports
+and dashboards for the management team.
+
+Requirements
+- 2 years of experience in data analysis
+- Advanced Excel and SQL skills
+- Power BI dashboards
+- Python and pandas for data cleaning
+- Business analysis and clear communication
+
+What you will do
+- Build weekly Power BI sales dashboards
+- Write SQL queries and clean data with pandas
+- Present findings to managers in simple language

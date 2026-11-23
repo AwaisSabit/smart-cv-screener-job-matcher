@@ -1,0 +1,23 @@
+Ayesha Khan
+ayesha.khan@example.com | Lahore, Pakistan
+
+Summary
+Python Developer with 5 years of experience building web applications
+with Django and Flask. Strong with SQL, REST APIs, Git and Docker.
+
+Experience
+Senior Python Developer, TechNova Solutions, Lahore — 2021 to present
+- Built Django REST APIs serving 50,000 users
+- Led a team of 4 developers, Agile Scrum
+- Docker and AWS deployments, PostgreSQL databases
+
+Python Developer, CodeHub, Lahore — 2019 to 2021
+- Built Flask microservices and automated tests
+- Worked with pandas and data analysis dashboards
+
+Education
+BS Computer Science, University of the Punjab, 2019
+
+Skills
+Python, Django, Flask, SQL, REST API, Git, Docker, AWS, Agile,
+pandas, data analysis, communication, teamwork, problem solving

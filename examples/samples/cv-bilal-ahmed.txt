@@ -1,0 +1,21 @@
+Bilal Ahmed
+bilal.ahmed@example.com | Karachi, Pakistan
+
+Summary
+Data Analyst with 4 years of experience turning business data into
+reports and dashboards. Strong in Excel, SQL, Power BI and Python.
+
+Experience
+Data Analyst, RetailOne, Karachi — 2022 to present
+- Built Power BI dashboards for weekly sales reporting
+- SQL queries on PostgreSQL, cleaned data with pandas
+
+Junior Data Analyst, MarketWise, Karachi — 2020 to 2022
+- Excel reporting, data entry and monthly summaries
+
+Education
+BBA, Institute of Business Administration, 2020
+
+Skills
+Excel, SQL, Power BI, pandas, data analysis, Python, communication,
+business analysis, attention to detail, time management

@@ -1,0 +1,16 @@
+Usman Raza
+usman.raza@example.com | Faisalabad, Pakistan
+
+Summary
+Fresh graduate looking for my first job in software development.
+I know basic Python and HTML and I am a fast learner.
+
+Education
+BS Computer Science, Government College University Faisalabad, 2025
+
+Projects
+- To-do list app in Python
+- Personal portfolio website in HTML and CSS
+
+Skills
+Python, HTML, CSS, communication, adaptability
