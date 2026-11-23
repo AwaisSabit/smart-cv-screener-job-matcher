@@ -7,7 +7,7 @@ in a :class:`~cvmatch.models.CV`.
 
 from pathlib import Path
 
-from cvmatch.models import CV
+from cvmatch.models import CV, Job
 
 SUPPORTED_SUFFIXES = {".txt", ".pdf", ".docx"}
 
@@ -81,3 +81,37 @@ def parse_cv(path):
     else:
         raise ValueError(f"Unsupported CV file type: {suffix or '(no extension)'}")
     return CV(name=guess_name(text, str(path)), source=str(path), raw_text=text)
+
+
+def parse_job(path):
+    """Parse a job description file into a :class:`~cvmatch.models.Job`.
+
+    Accepts the same ``.txt``, ``.pdf`` and ``.docx`` files as CVs.
+    The job title is taken from the first non-empty line.
+    """
+    path = Path(path)
+    suffix = path.suffix.lower()
+    if suffix == ".txt":
+        text = read_text_file(path)
+    elif suffix == ".pdf":
+        text = read_pdf_file(path)
+    elif suffix == ".docx":
+        text = read_word_file(path)
+    else:
+        raise ValueError(f"Unsupported job file type: {suffix or '(no extension)'}")
+    title = ""
+    for line in text.splitlines():
+        if line.strip():
+            title = line.strip()
+            break
+    return Job(title=title, source=str(path), raw_text=text)
+
+
+def parse_job_text(text, title=""):
+    """Build a :class:`~cvmatch.models.Job` from raw text directly."""
+    if not title:
+        for line in text.splitlines():
+            if line.strip():
+                title = line.strip()
+                break
+    return Job(title=title, source="(text)", raw_text=text)
