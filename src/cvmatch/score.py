@@ -59,6 +59,34 @@ def experience_fit_score(cv_years, min_years):
     return max(0.0, cv_years / min_years)
 
 
+SCORE_BANDS = [
+    (80, "Excellent match"),
+    (60, "Good match"),
+    (40, "Fair match"),
+    (20, "Weak match"),
+    (0, "Poor match"),
+]
+
+
+def score_label(score):
+    """Plain-language band for a 0–100 score."""
+    for threshold, label in SCORE_BANDS:
+        if score >= threshold:
+            return label
+    return "Poor match"
+
+
+def score_summary(result):
+    """One-sentence summary of a match result, from its real numbers."""
+    return (
+        f"{result.cv_name} scores {result.score}/100 against "
+        f"{result.job_title or 'the job'} ({score_label(result.score)}): "
+        f"{len(result.matched_skills)} of "
+        f"{len(result.matched_skills) + len(result.missing_skills)} required "
+        f"skills matched."
+    )
+
+
 def match_score(cv, job):
     """Score one CV against one job and return a :class:`MatchResult`.
 
