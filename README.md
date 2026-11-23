@@ -45,6 +45,20 @@ cvmatch batch cvs/ job.txt --output results.csv
 ```
 
 See `examples/demo.py` for a full worked example with fictional CVs.
+Run it from the project root:
+
+```bash
+python examples/demo.py
+```
+
+It scores one CV against the Python Developer job, ranks all four
+sample CVs, and writes the screening report, results CSV/JSON and
+shortlist to `examples/output/`. Regenerate the PDF and Word versions
+of the sample CVs with:
+
+```bash
+python examples/generate_samples.py
+```
 
 ## Honest limits
 
