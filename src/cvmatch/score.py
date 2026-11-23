@@ -133,6 +133,37 @@ def missing_skills(cv_skills, job_skills):
     return [skill for skill in job_skills if skill not in cv_set]
 
 
+def match_details(result):
+    """A report-ready dict of a result's matched skills and overlap."""
+    total_required = len(result.matched_skills) + len(result.missing_skills)
+    return {
+        "cv": result.cv_name,
+        "job": result.job_title,
+        "score": result.score,
+        "label": score_label(result.score),
+        "matched_skills": result.matched_skills,
+        "missing_skills": result.missing_skills,
+        "matched_count": len(result.matched_skills),
+        "required_count": total_required,
+        "keyword_overlap": result.keyword_overlap,
+    }
+
+
+def match_details_lines(result):
+    """Human-readable lines for matched skills and keyword overlap."""
+    details = match_details(result)
+    lines = [
+        f"Matched skills ({details['matched_count']} of {details['required_count']}): "
+        + (", ".join(details["matched_skills"]) if details["matched_skills"] else "none"),
+        "Missing skills: "
+        + (", ".join(details["missing_skills"]) if details["missing_skills"] else "none"),
+        f"Keyword overlap with the job description: "
+        f"{round(details['keyword_overlap'] * 100, 1)}% of the job's words "
+        f"also appear in the CV.",
+    ]
+    return lines
+
+
 def skill_gap_report(cv, job):
     """Plain-language summary of the skill gap between a CV and a job."""
     if not job.required_skills and job.raw_text:
