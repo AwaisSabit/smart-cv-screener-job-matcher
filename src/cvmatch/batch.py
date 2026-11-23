@@ -15,10 +15,22 @@ from cvmatch.report import (
 
 
 def find_cv_files(folder):
-    """List the CV files in a folder, sorted by name."""
+    """List the CV files in a folder, sorted by name.
+
+    When the same CV exists in several formats (.txt, .docx, .pdf),
+    only one copy is kept — .txt first, then .docx, then .pdf — so
+    one person is never screened three times.
+    """
     folder = Path(folder)
-    files = [p for p in folder.iterdir() if p.is_file() and p.suffix.lower() in SUPPORTED_SUFFIXES]
-    return sorted(files, key=lambda p: p.name.lower())
+    preference = {".txt": 0, ".docx": 1, ".pdf": 2}
+    best = {}
+    for path in folder.iterdir():
+        if not path.is_file() or path.suffix.lower() not in SUPPORTED_SUFFIXES:
+            continue
+        stem = path.stem.lower()
+        if stem not in best or preference[path.suffix.lower()] < preference[best[stem].suffix.lower()]:
+            best[stem] = path
+    return sorted(best.values(), key=lambda p: p.name.lower())
 
 
 def screen_folder(folder, job_path, threshold=60.0, top_n=None):
