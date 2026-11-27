@@ -69,6 +69,17 @@ def test_degree_level_and_name():
     assert extract_degree_level("MBA Marketing, 2018") == "Master's"
 
 
+def test_bba_degree_level_and_name():
+    # BBA is a Bachelor's degree: the old pattern only matched the
+    # whole word "BA", so a BBA CV came back with no degree level.
+    assert extract_degree_level("BBA, University of Karachi, 2020") == "Bachelor's"
+    assert extract_degree_name("BBA, University of Karachi, 2020") == "BBA"
+    edu = extract_education("BBA, University of Karachi, 2020")
+    assert edu["level"] == "Bachelor's"
+    assert edu["degree"] == "BBA"
+    assert edu["years"] == [2020]
+
+
 def test_education_dict():
     edu = extract_education("MBA Marketing, 2018")
     assert edu["level"] == "Master's"

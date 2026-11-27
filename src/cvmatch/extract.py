@@ -72,7 +72,7 @@ def experience_from_dates(text, current_year=2026):
 DEGREE_LEVELS = [
     ("PhD", [r"\bph\.?d\b", r"\bdoctorate\b"]),
     ("Master's", [r"\bmaster'?s\b", r"\bm\.?sc\b", r"\bmba\b", r"\bms\b", r"\bm\.?phil\b"]),
-    ("Bachelor's", [r"\bbachelor'?s\b", r"\bb\.?sc\b", r"\bbs\b", r"\bba\b", r"\bb\.?com\b", r"\bbe\b", r"\bb\.?eng\b"]),
+    ("Bachelor's", [r"\bbachelor'?s\b", r"\bb\.?sc\b", r"\bbs\b", r"\bba\b", r"\bbba\b", r"\bb\.?com\b", r"\bbe\b", r"\bb\.?eng\b"]),
     ("Diploma", [r"\bdiploma\b"]),
     ("Intermediate", [r"\bintermediate\b", r"\bf\.?sc\b", r"\bfa\b"]),
     ("Matric", [r"\bmatric\b"]),

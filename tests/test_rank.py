@@ -3,6 +3,7 @@
 from pathlib import Path
 
 from cvmatch.batch import find_cv_files, screen_folder, screen_folder_to_files
+from cvmatch.extract import enrich_cv
 from cvmatch.models import CV, Job
 from cvmatch.rank import rank_cvs, rank_jobs, shortlist, shortlist_cvs
 from cvmatch.report import (
@@ -131,3 +132,11 @@ def test_match_score_is_not_hardcoded():
     a = match_score(STRONG, job)
     b = match_score(_cv("Copy", STRONG.raw_text.replace("Django", "Cooking")), job)
     assert a.score != b.score
+
+
+def test_rank_fixtures_all_have_degree_levels():
+    # Bilal Ahmed's CV says "BBA." — before the fix his degree level
+    # came back empty, so every fixture CV must enrich to a level.
+    for cv in (STRONG, MID, WEAK):
+        assert enrich_cv(cv).degree_level, f"{cv.name} has no degree level"
+    assert enrich_cv(MID).degree_level == "Bachelor's"
